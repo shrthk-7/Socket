@@ -22,13 +22,16 @@ def send(msg):
 	client.send(message)
 
 def receive():
-	while connected:
-		msg_length = client.recv(HEADER).decode(FORMAT)
-		if msg_length:
-			msg_length = int(msg_length)
-			msg = client.recv(msg_length).decode(FORMAT)
-			print(f">>>{msg}")
-	print('STOPPED RECEIVING')
+	try:
+		while connected:
+			msg_length = client.recv(HEADER).decode(FORMAT)
+			if msg_length:
+				msg_length = int(msg_length)
+				msg = client.recv(msg_length).decode(FORMAT)
+				print(f">>>{msg}")
+	except:
+		pass
+	print('[STOPPED RECEIVING]')
 
 thread = threading.Thread(target=receive)
 thread.start()
@@ -38,6 +41,6 @@ while connected:
 	send(msg)
 	if msg == DISCONNECT_MESSAGE:
 		print('[DISCONNECTED]')
-		connected = False
+		break
 
 client.close()

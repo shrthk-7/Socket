@@ -23,8 +23,12 @@ def broadcast(msg, currentConn):
 		conn = client['conn']
 		if currentConn == conn:
 			continue
-		conn.send(send_length)
-		conn.send(msg.encode(FORMAT))
+		try:
+			conn.send(send_length)
+			conn.send(msg.encode(FORMAT))
+		except:
+			clients.remove(client)
+
 
 def handle_client(conn, addr):
 	print(f'[NEW CONNECTION] {addr}')
